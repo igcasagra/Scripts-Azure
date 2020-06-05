@@ -3,9 +3,9 @@ $Cert = 'AACooperatiClient.pfx'
 $CertName = "$CertLocation$Cert"
 
 
-###############################################
+
 #    Create a self-signed root certificate    #
-###############################################
+
 if((Test-Path -Path $CertLocation -ErrorAction SilentlyContinue) -eq $false){
     mkdir $CertLocation
     cd $CertLocation
@@ -22,9 +22,9 @@ $cert = New-SelfSignedCertificate -Type Custom -KeySpec Signature `
     -KeyUsageProperty Sign -KeyUsage CertSign
 
 
-#######################################
+
 #    Generate a client certificate    #
-#######################################
+
 New-SelfSignedCertificate `
     -Type Custom `
     -DnsName P2SChildCert `
@@ -38,9 +38,9 @@ New-SelfSignedCertificate `
     -TextExtension @("2.5.29.37={text}1.3.6.1.5.5.7.3.2")
     
 
-#############################
+
 #    Export Certificates    #
-#############################
+
 $RootCert = (Get-ChildItem `
     -Path "Cert:\CurrentUser\My\"`
     | Where-Object `
@@ -72,9 +72,8 @@ Export-PfxCertificate `
     -Cert $ExportPrivateCertPath
     
 
-#####################################
 #    Add OpenSSL to  System Path    #
-#####################################
+
 if (-not (Test-Path $profile)) {
     New-Item -Path $profile -ItemType File -Force
 }
@@ -84,9 +83,9 @@ if (-not (Test-Path $profile)) {
 . $profile
 
 
-############################
+
 #    Install Chocolatey    #
-############################
+
 Set-ExecutionPolicy Bypass `
     -Scope Process `
     -Force; `
@@ -96,34 +95,34 @@ Set-ExecutionPolicy Bypass `
     )
 
 
-##########################
+
 #    Download OpenSSL    #
-##########################
+
 choco install OpenSSL.Light -y --force
 Invoke-WebRequest `
     -Uri 'http://web.mit.edu/crypto/openssl.cnf' `
     -OutFile "$CertLocation\openssl.cnf"
 
 
-##########################
+
 #    Download OpenVPN    #
-##########################
+
 Invoke-WebRequest `
     -Uri 'https://swupdate.openvpn.org/community/releases/openvpn-install-2.4.7-I607-Win10.exe' `
     -OutFile "$CertLocation\openvpn-install-2.4.7-I607-Win10.exe"
 
 
-#############################
+
 #    Extract Private Key    #
-#############################
+
 . $profile
 $OpenSSLArgs = "pkcs12 -in C:\temp\vpn\AACooperatiClient.pfx -nodes -out c:\temp\vpn\profileinfo.txt"
 Start-Process openssl $OpenSSLArgs
 
 
-#########################
+
 #    Install OpenVPN    #
-#########################
+
 Start-Process "$CertLocation\openvpn-install-2.4.7-I607-Win10.exe" /S
 
 
