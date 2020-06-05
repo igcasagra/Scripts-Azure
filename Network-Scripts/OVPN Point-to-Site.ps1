@@ -22,7 +22,7 @@ $cert = New-SelfSignedCertificate -Type Custom -KeySpec Signature `
     -KeyUsageProperty Sign -KeyUsage CertSign
 
 
-#######################################
+######################################2#
 #    Generate a client certificate    #
 #######################################
 New-SelfSignedCertificate `
