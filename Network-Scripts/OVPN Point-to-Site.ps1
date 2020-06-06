@@ -4,7 +4,7 @@ $CertName = "$CertLocation$Cert"
 
 
 
-#    Create a self-signed root certificate    #
+#    Create a self-signed root certificate
 
 if((Test-Path -Path $CertLocation -ErrorAction SilentlyContinue) -eq $false){
     mkdir $CertLocation
@@ -23,7 +23,7 @@ $cert = New-SelfSignedCertificate -Type Custom -KeySpec Signature `
 
 
 
-#    Generate a client certificate    #
+#    Generate a client certificate 
 
 New-SelfSignedCertificate `
     -Type Custom `
@@ -39,7 +39,7 @@ New-SelfSignedCertificate `
     
 
 
-#    Export Certificates    #
+#    Export Certificates
 
 $RootCert = (Get-ChildItem `
     -Path "Cert:\CurrentUser\My\"`
